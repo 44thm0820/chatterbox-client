@@ -11,6 +11,11 @@ var App = {
     RoomsView.initialize();
     MessagesView.initialize();
 
+    $('.refresh').on('click', function(){
+      $('#chats').empty();
+      App.fetch();
+    });
+
     // Fetch initial batch of messages
     App.startSpinner();
     App.fetch(App.stopSpinner);
@@ -21,6 +26,10 @@ var App = {
     Parse.readAll((data) => {
       // examine the response from the server request:
       console.log(data);
+      console.log(data.results[0]);
+      for(var i = 0; i < data.results.length; i++) {
+        MessagesView.renderMessage(data.results[i]);
+      }
 
       callback();
     });
