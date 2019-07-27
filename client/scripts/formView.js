@@ -13,7 +13,9 @@ var FormView = {
     var message = {
       text: $('#message').val(),
       username: App.username,
+      roomname: RoomsView.$select.find(':selected').text(),
     };
+
     Parse.create(message);
     console.log('click!');
   },

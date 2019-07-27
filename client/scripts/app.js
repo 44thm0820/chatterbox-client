@@ -12,7 +12,7 @@ var App = {
     MessagesView.initialize();
 
     $('.refresh').on('click', function(){
-      $('#chats').empty();
+      // $('#chats').empty();
       App.fetch();
     });
 
@@ -23,13 +23,14 @@ var App = {
   },
 
   fetch: function(callback = ()=>{}) {
+    $('#chats').empty();
     Parse.readAll((data) => {
       // examine the response from the server request:
-      console.log(data);
-      console.log(data.results[0]);
-      for(var i = 0; i < data.results.length; i++) {
-        MessagesView.renderMessage(data.results[i]);
-      }
+
+      data.results.forEach( (message, i) => {
+        Messages[i] = message;
+      })
+      MessagesView.render();
 
       callback();
     });
