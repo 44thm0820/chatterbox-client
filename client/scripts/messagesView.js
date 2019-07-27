@@ -51,34 +51,47 @@ var MessagesView = {
         roomname: roomname,
         text: text,
         time: time,
+        createdAt: createdAt,
       };
 
       //checks for if user is friend before render
-      if (Friends[username]) {
-        var $renderedMessage = MessageView.renderFriend(sanitizedMessage);
-      } else {
-        var $renderedMessage = MessageView.render(sanitizedMessage);
-      }
+
+      var $renderedMessage = MessageView.render(sanitizedMessage);
       $('#chats').prepend($renderedMessage);
       arguments[0].shown = true;
     }
 
   },
 
-  update: function() {
+  updateFriends: function() {
+    $('.username').each(function(i){
+      if(Friends[this.innerHTML]) {
+        $(this).addClass('friend');
+      } else {
+        $(this).removeClass('friend');
+      }
+      // console.log($(this));
+    });
+  },
 
+  updateTime: function() {
+    $('.chat').each(function() {
+      var time = $(this).find('.createAt');
+      console.log(this.children);
+    });
   },
 
   handleAddFriends: function() {
 
     //toggles clicked freind
-    var username = $(this).text();
+    var username = this.innerHTML;
+    // var username = $(this).text();
     if (username !== 'toggleStatus' ) {
       Friends.toggleStatus(username);
     }
 
     //re render
-    // MessagesView.render();
+    MessagesView.updateFriends();
   },
 
   sanitize: function (str) {

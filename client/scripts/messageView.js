@@ -4,6 +4,7 @@ var MessageView = {
   render: _.template(`
       <div class="chat">
         <div>
+          <span style='display: none' class="createAt"><%= createdAt%></span>
           <span class="username"><%= username%></span>
           <span class='time'> &#183 <%= time%></span>
         </div>
