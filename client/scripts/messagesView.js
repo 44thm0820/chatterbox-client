@@ -9,16 +9,9 @@ var MessagesView = {
 
   render: function() {
 
-    // for(var i = 0; i < data.results.length; i++) {
-    //   MessagesView.renderMessage(data.results[i]);
-    //   if (data.results[i].roomname !== undefined) {
-    //     Rooms.add(data.results[i].roomname);
-    //   }
-    // }
     $('#chats').empty();
-    for(var key in Messages) {
-      // console.log(Messages[key]);
-      if(Messages[key].roomname === RoomsView.$select.find(':selected').text()) {
+    for (var key in Messages) {
+      if (Messages[key].roomname === RoomsView.$select.find(':selected').text()) {
         MessagesView.renderMessage(Messages[key]);
       }
       if (Messages[key].roomname !== undefined) {
@@ -28,44 +21,60 @@ var MessagesView = {
 
   },
 
-  renderMessage: function(message) {
-    // if(message.text)
-    var lt = /</g,
-        gt = />/g,
-        ap = /'/g,
-        ic = /"/g;
+  renderMessage: function({username, roomname, text}) {
 
-    if(message.username === undefined) {
-      message.username = 'no username provided';
+    //sanitize
+    username = MessagesView.sanitize(username);
+    text = MessagesView.sanitize(text);
+    roomname = MessagesView.sanitize(roomname);
+
+
+    //defaulting
+    if (username === undefined) {
+      username = '<anonymous>';
     }
 
-    if(message.text === undefined) {
-      message.text = 'no text';
+    if (text === undefined) {
+      text = '<empty message.';
+    }
+
+    if (roomname === undefined) {
+      roomname = 'All Chatrooms';
+    }
+
+    //construct newly sanitized message
+    var sanitizedMessage = {
+      username: username,
+      roomname: roomname,
+      text: text,
+    };
+
+    //checks for if user is friend before render
+    if (Friends[username]) {
+      var $renderedMessage = MessageView.renderFriend(sanitizedMessage);
     } else {
-      message.text = message.text.replace(lt, "&lt;").replace(gt, "&gt;").replace(ap, "&#39;").replace(ic, "&#34;");
+      var $renderedMessage = MessageView.render(sanitizedMessage);
     }
 
-    if(message.roomname === undefined) {
-      message.roomname = 'all messages';
-    }
-
-    // if(message.roomname === RoomsView.$select.find(':selected').text()) {
-      if(Friends[message.username]) {
-        var $renderedMessage = MessageView.renderFriend(message);
-      } else {
-        var $renderedMessage = MessageView.render(message);
-      }
-      $('#chats').append($renderedMessage);
-
-    // }
+    //adds message to chats
+    $('#chats').append($renderedMessage);
   },
 
   handleAddFriends: function() {
     var username = $(this).text();
-    // var username = this.text();
-    // console.log(username);
-    Friends.toggleStatus(username);
+    console.log(username);
+    if (username !== 'toggleStatus' ) {
+      Friends.toggleStatus(username);
+    }
     MessagesView.render();
   },
 
+  sanitize: function (str) {
+    var lt = /</g;
+    var gt = />/g;
+    var ap = /'/g;
+    var ic = /"/g;
+
+    return str.replace(lt, '&lt;').replace(gt, '&gt;').replace(ap, '&#39;').replace(ic, '&#34;');
+  },
 };

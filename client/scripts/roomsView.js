@@ -12,7 +12,7 @@ var RoomsView = {
   },
 
   renderRoom: function(room) {
-    var $roomNode = $(`<option>${room}</option>`)
+    var $roomNode = $(`<option>${room}</option>`);
     // console.log('room text: ', room);
     // console.log($roomNode);
     RoomsView.$select.append($roomNode);

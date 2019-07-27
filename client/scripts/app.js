@@ -9,14 +9,13 @@ var App = {
 
     $('.username').on('click', function() {
       console.log('clicked user');
-    })
+    });
 
     FormView.initialize();
     RoomsView.initialize();
     MessagesView.initialize();
 
-    $('.refresh').on('click', function(){
-      // $('#chats').empty();
+    $('.refresh').on('click', function() {
       App.fetch();
     });
 
@@ -31,9 +30,10 @@ var App = {
     Parse.readAll((data) => {
       // examine the response from the server request:
 
+      //transfer all data to Messages
       data.results.forEach( (message, i) => {
         Messages[i] = message;
-      })
+      });
       MessagesView.render();
 
       callback();
