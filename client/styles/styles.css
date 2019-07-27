@@ -88,3 +88,13 @@ form input[type=text] {
     background-color: #0090da;
 }
 
+.time {
+    color: gray;
+    font-weight: 200;
+
+}
+
+.text {
+    word-wrap: break-word;
+}
+

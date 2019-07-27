@@ -7,38 +7,32 @@ var App = {
   initialize: function() {
     App.username = window.location.search.substr(10);
 
-    $('.username').on('click', function() {
-      console.log('clicked user');
-    });
 
     FormView.initialize();
     RoomsView.initialize();
     MessagesView.initialize();
 
-    $('.refresh').on('click', function() {
-      App.fetch();
-    });
-
     // Fetch initial batch of messages
     App.startSpinner();
     App.fetch(App.stopSpinner);
 
+    //auto updater
+    setInterval(App.fetch, 500);
+    setInterval(MessagesView.render, 500);
+
   },
 
   fetch: function(callback = ()=>{}) {
-    $('#chats').empty();
+    // $('#chats').empty();
     Parse.readAll((data) => {
       // examine the response from the server request:
-
-      //transfer all data to Messages
-      data.results.forEach( (message, i) => {
-
-        var objectId = message.objectId;
-        delete message.objectId;
-        Messages[objectId] = message;
-      });
-      MessagesView.render();
-
+      var msgs = data.results;
+      for (var i = msgs.length-1; i >= 0; i--) {
+        var objectId = msgs[i].objectId;
+        delete msgs[i].objectId;
+        msgs[i].shown = false;
+        Messages[objectId] = msgs[i];
+      }
       callback();
     });
   },
