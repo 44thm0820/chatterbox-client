@@ -32,7 +32,10 @@ var App = {
 
       //transfer all data to Messages
       data.results.forEach( (message, i) => {
-        Messages[i] = message;
+
+        var objectId = message.objectId;
+        delete message.objectId;
+        Messages[objectId] = message;
       });
       MessagesView.render();
 
