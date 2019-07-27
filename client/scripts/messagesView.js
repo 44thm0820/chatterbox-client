@@ -77,6 +77,7 @@ var MessagesView = {
   updateTime: function() {
     $('.chat').each(function() {
       var time = $(this).find('.createAt');
+
       console.log(this.children);
     });
   },
