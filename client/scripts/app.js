@@ -7,6 +7,10 @@ var App = {
   initialize: function() {
     App.username = window.location.search.substr(10);
 
+    $('.username').on('click', function() {
+      console.log('clicked user');
+    })
+
     FormView.initialize();
     RoomsView.initialize();
     MessagesView.initialize();

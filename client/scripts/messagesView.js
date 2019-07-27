@@ -1,10 +1,10 @@
 var MessagesView = {
 
   $chats: $('#chats'),
-  $username: $('#chats .username'),
+
 
   initialize: function() {
-    MessagesView.$username.on('click', MessagesView.handleAddFriends);
+    MessagesView.$chats.on('click', 'div .username', MessagesView.handleAddFriends);
   },
 
   render: function() {
@@ -15,7 +15,7 @@ var MessagesView = {
     //     Rooms.add(data.results[i].roomname);
     //   }
     // }
-
+    $('#chats').empty();
     for(var key in Messages) {
       // console.log(Messages[key]);
       if(Messages[key].roomname === RoomsView.$select.find(':selected').text()) {
@@ -50,13 +50,22 @@ var MessagesView = {
     }
 
     // if(message.roomname === RoomsView.$select.find(':selected').text()) {
-    var $renderedMessage = MessageView.render(message);
-    $('#chats').append($renderedMessage);
+      if(Friends[message.username]) {
+        var $renderedMessage = MessageView.renderFriend(message);
+      } else {
+        var $renderedMessage = MessageView.render(message);
+      }
+      $('#chats').append($renderedMessage);
+
     // }
   },
 
   handleAddFriends: function() {
-    console.log('test');
+    var username = $(this).text();
+    // var username = this.text();
+    // console.log(username);
+    Friends.toggleStatus(username);
+    MessagesView.render();
   },
 
 };
